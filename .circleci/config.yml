@@ -25,7 +25,7 @@ jobs:
             --write-out "\n%{response_code}\n" \
             --request POST \
             --header "Accept: application/vnd.github+json" \
-            --header "Authorization: Bearer $GH_ACCESS_TOKEn" \
+            --header "Authorization: Bearer $GH_ACCESS_TOKEN" \
             --header "X-GitHub-Api-Version: 2022-11-28" \
             --data '{"event_type":"liboqs-upstream-test"}' \
             https://api.github.com/repos/SWilson4/cicd-playground-downstream/dispatches   
