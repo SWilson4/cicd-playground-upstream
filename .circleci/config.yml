@@ -17,7 +17,7 @@ jobs:
     docker:
       - image: cimg/base:2020.01
     steps:
-      - *localCheckout
+      - checkout # localCheckout
       - run:
           name: Trigger GitHub actions in cicd-playground-downstream
           command: |2
