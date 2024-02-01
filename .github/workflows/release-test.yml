@@ -2,7 +2,7 @@ name: Release tests
 
 on:
   release:
-    types: [published]
+    types: [preleased]
 
 jobs:
   downstream-release-test:
