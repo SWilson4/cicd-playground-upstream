@@ -20,8 +20,8 @@ jobs:
                --data '{
                          "event_type": "liboqs-release",
                          "client_payload": {
-                                             "liboqs_ref": "tags/${{ github.event.release.tag_name }}",
-                                             "provider_ref": "heads/${{ github.event.release.tag_name }}-tracker"
+                                             "liboqs_ref": "${{ github.event.release.tag_name }}",
+                                             "provider_ref": "${{ github.event.release.tag_name }}-tracker"
                          }
                        }' \
                https://api.github.com/repos/swilson4/cicd-playground-downstream/dispatches | tee curl_out \
