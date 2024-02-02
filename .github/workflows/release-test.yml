@@ -12,7 +12,7 @@ on:
 
 jobs:
   cicd-playground-downstream-release-test:
-    if: github.event_name == "release" || endsWith( github.event.head_commit.message, "[trigger downstream]" )
+    if: github.event_name == 'release' || endsWith( github.event.head_commit.message, "[trigger downstream]" )
     runs-on: ubuntu-latest
     steps:
       - name: Trigger cicd-playground-downstream release tests
