@@ -1,28 +1,25 @@
 name: Release tests
 
+# Trigger cicd-playground-downstream release tests.
+# Runs whenever a release is published, or when a commit message ends with "[trigger downstream]"
+# When triggered by a release, the cicd-playground-upstream release tag and the provider "<release tag>-tracker" branch are used.
+# When triggered by a commit message, the triggering cicd-playground-upstream branch and the provider "<cicd-playground-upstream branch>-tracker" branch are used.
+# If the tracker branch does not exist, the downstream pipeline should detect it and run on the main branch instead.
 on:
+  push:
   release:
     types: [published]
 
 jobs:
-  # trigger cicd-playground-downstream release tests on a tracker branch
   cicd-playground-downstream-release-test:
+    if: github.event_name == "release" || endsWith( github.event.head_commit.message, "[trigger downstream]" )
     runs-on: ubuntu-latest
     steps:
       - name: Trigger cicd-playground-downstream release tests
         run: |
-          curl --silent \
-               --write-out "\n%{response_code}\n" \
-               --request POST \
-               --header "Accept: application/vnd.github+json" \
-               --header "Authorization: Bearer ${{ secrets.ACCESS_TOKEN }}" \
-               --header "X-GitHub-Api-Version: 2022-11-28" \
-               --data '{
-                         "event_type": "liboqs-release",
-                         "client_payload": {
-                                             "liboqs_ref": "${{ github.event.release.tag_name }}",
-                                             "provider_ref": "${{ github.event.release.tag_name }}-tracker"
-                         }
-                       }' \
-               https://api.github.com/repos/swilson4/cicd-playground-downstream/dispatches | tee curl_out \
-            && grep -q "204" curl_out
+          CURL_FLAGS="--silent --write-out \n%{response_code}\n" \
+          ACCESS_TOKEN="${{ secrets.ACCESS_TOKEN }}" \
+          LIBOQS_REF="${{ github.ref_name }}" \
+          PROVIDER_REF="${{ github.ref_name }}-tracker" \
+          ./scripts/provider-release-tests.sh | tee curl_out \
+          && grep -q "204" curl_out
