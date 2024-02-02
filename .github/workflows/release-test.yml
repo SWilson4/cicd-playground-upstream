@@ -15,6 +15,12 @@ jobs:
     if: github.event_name == 'release' || endsWith( github.event.head_commit.message, '[trigger downstream]' )
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout release tests script
+        uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            scripts/provider-release-tests.sh
+          sparse-checkout-cone-mode: false
       - name: Trigger cicd-playground-downstream release tests
         run: |
           CURL_FLAGS="--silent --write-out \n%{response_code}\n" \
